@@ -49,7 +49,7 @@ A best automation Reconaissance tool for bug bounty by just entering your target
 <h4>The Script will automatically recon for your target </h4>
  <h1>Note !</h1>
   <h3>Chaos API_KEY</h3>
-  <h5><p>To run the main script without any error you should insert the api key for chaos in shell script [line no: 269 near -key {api_key_here} swtich] and To obtain the API_KEY you can signup here and obtain it <h4><a href="https://chaos.projectdiscovery.io/">Chaos_API_KEY</h4></a></p>
+  <h5><p>To run the main script without any error you should insert the api key for chaos in main shell script [line no: 269 near -key {api_key_here} swtich] and To obtain the API_KEY you can signup here and obtain it <h4><a href="https://chaos.projectdiscovery.io/">Chaos_API_KEY</h4></a></p>
 <br>
 <h1>Tool Installation<h1>
   <h5><p> If you face any error in the process of installing tools.Please Install the required tools manually and the required tools are mentioned in the Credits </h5></p>
