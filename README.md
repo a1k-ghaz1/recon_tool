@@ -1,6 +1,6 @@
+![wallpaperflare com_wallpaper](https://github.com/sanjai-AK47/recon_tool/assets/119435129/912c8114-8d6d-4d9c-bb06-fe8b02bebbc2)
 # Recon Tool
-A best automation Reconaissance tool for bug bounty by just entering your target it will automatically recon for your target
-
+A best automation Reconaissance tool for bug bounty by just entering your target it will automatically recon for your target and This tool for Linux users
 <h5>this tool do:</h5>
 <h6>1: Subdomain Enumeration</h6>
 <h6>2: Crawl Sites</h6>
