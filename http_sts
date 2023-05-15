@@ -1,0 +1,264 @@
+#!/bin/bash
+
+blue=$(tput setaf 4)    #color for blue
+red=$(tput setaf 1)     #color for red
+yellow=$(tput setaf 3)  #color for yellow
+green=$(tput setaf 2)   #color for green
+white=$(tput setaf 7)   #color for white
+magenta=$(tput setaf 5) #color for magenta
+cyan=$(tput setaf 6)     #color for cyan
+orange=$(tput setaf 208)
+
+echo """${white}
+
+______                       _____           _ 
+| ___ \                     |_   _|         | |
+| |_/ /___  ___ ___  _ __     | | ___   ___ | |
+|    // _ \/ __/ _ \| '_ \    | |/ _ \ / _ \| |
+| |\ \  __/ (_| (_) | | | |   | | (_) | (_) | |
+\_| \_\___|\___\___/|_| |_|   \_/\___/ \___/|_| [v2.2.1]
+                                               
+                                               
+                            Made by ♥ sanjai kumar @ https://github.com/sanjai-AK47               
+                
+""" 
+
+echo "${red}[!]Performing to find http status codes"
+while getopts ":o:l:h" opt;
+do
+
+ case ${opt} in
+ 
+     l| list)
+        
+        subdomains_file=$OPTARG
+        ;;
+        
+    o| output)
+
+       output_dir1=$OPTARG &> /dev/null
+       
+       ;;
+
+      
+
+     h| help)
+    
+        echo """${green}[#]USAGE: $0 [-l or --list list of files to find http status code] [-o or --output to save the result directory in a given directory by user]  [-h or help this will console the message to use]
+              
+                  -l or list   : list of files to find http status code. 
+                  -o or -output: path to save the result directory in a given directory by user
+                  -h or help   : this will show the message and exit.. """
+                  exit
+                  
+        ;;
+     \?)
+        
+        echo "${red}[#]Invalid option: -$OPTARG " >&2 
+        sleep 2
+        exit
+        ;;
+        
+     :)
+     
+        echo "${white}[#]Requirement: Option $OPTARG requires an argument " >&2
+        sleep 2
+        exit
+        ;;
+    
+ esac
+ 
+ done
+ 
+ sleep 1
+
+ 
+ #check for file exist or not
+ if [ -z "$subdomains_file" ]; then
+    echo "${red}[#]Error: Didn't Entered a file that contains list of subdomains to find status code"
+    exit 1
+fi
+
+if [ ! -f "$subdomains_file" ];
+then
+    echo "${red}[#] File didn't exist in the working directory make sure the file in current directory "
+fi
+
+sleep 1
+
+output_dir=status_code_results
+
+if [[ ! -d "$output_dir1" ]];
+then
+    echo "${red}[#]Error directory for ouput does not exist. Please check it.."
+    exit
+else
+    echo "${green}[#]directory exist result will be saved in this "$output_dir1"/"$output_dir" directory"
+fi
+
+echo "${blue}[#]Starting the Program.."
+
+
+
+sleep 2  
+
+echo "${red}[#]Red for 404(Error page),500(Internal_server_error),000(timeout).."  
+
+sleep 1
+
+echo "${cyan}[#]Cyan for 503(Service_unavailable)... " 
+
+sleep 1 
+
+echo "${magenta}[#]Magenta for 403(Page Forbidden).." 
+
+sleep 1
+
+echo "${green}[#]Green for 200(Success).."      
+
+sleep 1                         
+
+echo "${blue}[#]Blue for 301(Redirected).."
+
+sleep 1
+
+echo "${white}[#]White for 302(Page Found).."
+
+sleep 1
+
+echo "${orange}[#]Orange for other status code.."
+
+echo """
+
+
+"""
+
+sleep 3
+
+
+
+
+# create a directory to save the output files
+
+mkdir  "$output_dir1/$output_dir"
+
+
+# set the filenames for the output files
+others_file="$output_dir1/$output_dir/other_code.txt"
+
+error_file="$output_dir1/$output_dir/404_code.txt"
+
+success_file="$output_dir1/$output_dir/200_code.txt"
+
+redirected_file="$output_dir1/$output_dir/301_code.txt"
+
+found_file="$output_dir1/$output_dir/302_code.txt"
+
+forbidden_file="$output_dir1/$output_dir/403.code.txt"
+
+server_file="$output_dir1/$output_dir/500_code.txt"
+
+service_file="$output_dir1/$output_dir/503_code.txt"
+
+timeout_file="$output_dir1/$output_dir/timeout_000.txt"
+
+
+# create or truncate the output files
+
+touch "$others_file"    #checked
+
+touch "$error_file"     #checked
+
+touch "$success_file"   #checked
+
+touch "$redirected_file" #checked
+
+touch "$found_file"      #checked
+
+touch "$forbidden_file"  #checked
+
+touch "$server_file "   #checked
+
+touch "$service_file"    #checked
+
+touch "$timeout_file"   #checked
+
+
+
+
+# loop through each subdomain and check its status code
+while read subdomain;
+do
+
+    url="https://$subdomain"
+    
+    status_code=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+    
+        #checks for the subdoamin 404 Error..
+    
+    if [ "$status_code" -eq 404 ]; then
+        echo "$url - $status_code" >> "$error_file"
+        
+        echo "${red}[#]404_Error_found: $url - $status_code"
+        echo "${white}[#]Check Manually for Subdomain Take Over "
+        
+        #checks for Internal server error for subdomains..
+        
+    elif [[ "$status_code" -eq 500 ]];
+    then
+        echo "$url - $status_code" >> "$server_file"
+        
+        echo "${red}[#]Internal_Server_Error: $url - $status_code"
+     
+       #checks for service unavailable
+   elif [[ "$status_code" -eq 503 ]];
+   then
+       echo "$url - $status_code" >> "$service_file"
+       echo "${cyan}[#]Service_unavailable: $url - $status_code"
+       
+   elif [[ "$status_code" -eq 403 ]];
+   then
+       echo "$url - $status_code" >> "$forbidden_file"
+       echo "${magenta}[#]Page_forbidden: $url - $status_code"
+       echo "${white}[#]INFO: Please check manually for your confirmation.."
+       
+       #checks for timeout subdomains..
+       
+   elif [[ "$status_code" -eq 000 ]];
+   then
+       echo "$url - $status_code" >> "$timeout_file"
+       echo "${red}[#]Request_time_out: $url - $status_code"
+       echo "${white}[#]INFO: Please check manually for your confirmation.."
+        
+        #checks for 200 ok subdomain
+    elif [[ "$status_code" -eq 200 ]];
+    then
+        echo "$url - $status_code" >> "$success_file"
+        
+        echo "${green}[#]Success_200_OK: $url - $status_code"
+        
+        
+        #checks for 301 redirected subdoamin..
+        
+    elif [[ "$status_code" -eq 301 ]];
+    then
+        echo "$url - $status_code" >> "$redirected_file"
+        
+        echo "${blue}[#]Redirected_site: $url - $status_code"
+        
+    elif [[ "$status_code" -eq 302 ]];
+    then
+        echo "$url - $status_code" >> "$found_file"        
+        
+        echo "${white}[#]Page_Found: $url - $status_code"
+        
+    else   
+           
+        echo "$url - $status_code" >> "$others_file"
+        
+        echo "${orange}[#]Other_sts_code: $url - $status_code"
+    fi
+done < "$subdomains_file"
+
+echo """
+"""

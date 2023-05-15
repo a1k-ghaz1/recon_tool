@@ -1,0 +1,166 @@
+#!/bin/bash
+
+blue=$(tput setaf 4)    #color for blue
+red=$(tput setaf 1)     #color for red
+yellow=$(tput setaf 3)  #color for yellow
+green=$(tput setaf 2)   #color for green
+white=$(tput setaf 7)   #color for white
+magenta=$(tput setaf 5) #color for magenta
+cyan=$(tput setaf 6)     #color for cyan
+orange=$(tput setaf 208) #color for orange
+
+
+
+while getopts "l:h" opts;
+do
+
+    case $opts in
+
+       l)
+
+            all_subdomains=$OPTARG
+            ;;
+       h)
+
+            echo """${red}
+            ===========================================================================================================================================================================================
+            [!] Usage ipscraper [ -l file that contains list of subdomains for nslookup and who is] [ -h to print the help message and exit ]
+              
+                        -l  : File that contains list of subdomains for nslookup and whois 
+                        -h  : This will print the help message and exit  
+            ============================================================================================================================================================================================="""
+            exit
+            ;;
+
+       \?)
+        
+            echo "${red}[!]Invalid option: -$OPTARG " >&2 
+            sleep 2
+            exit
+            ;;
+        
+       :)
+     
+            echo "${red}[!]Requirement: Option $OPTARG requires an argument " >&2
+            sleep 2
+            exit
+            ;;
+
+        esac
+done
+
+if [ -z "$all_subdomains" ]; then
+    echo "${red}[-]Error: Enter a file that contains list of subdomains"
+    exit 
+
+else
+    
+    sleep 1
+
+    echo "${green}[-]Checking file exist or not"
+
+    if [ ! -f "$all_subdomains" ];
+    then
+        
+        echo "${red}[!]File didn't exist. Check the file exist or not OR Enter the path/to/file correctly"
+        exit
+
+    else
+
+        echo "${green}[!]Given file exist continuing the process"
+    fi
+
+fi
+sleep 1
+echo "${red}[!]Starting nslookups for found subdomains"
+
+for ip in  $(cat $all_subdomains);
+do
+
+    nslookup=$(nslookup "$ip")
+    echo "${green}[!]Results: "$nslookup"" >> "nslookup_subdomains.txt"
+    echo "${green}[!]Finished : "$ip""
+
+done
+
+
+sleep 1
+
+sort -u nslookup_subdomains.txt -o nslookup_subdomains.txt
+
+sleep 1
+
+echo "${red}[!]Getting ip addresses from nslookup_subdomains.txt" 
+
+cat nslookup_subdomains.txt | grep -E 'Address(es)?:' | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' >> subdomains_ip.txt  
+
+sleep 2
+
+echo "${green}[!]Got all ip addresses from nslookup_subdomains.txr and save in subdomains_ip.txt"
+
+sleep 2
+
+echo "${green}[!]Starting whois for found subdomains"
+
+sleep 1
+
+for ip in  $(cat $all_subdomains);
+do
+
+    whois=$(whois "$ip")
+    echo "${green}[!]Results: "$whois"" >> "whois_subdomains.txt"
+    echo "${green}[!]Finished : "$ip""
+
+done
+
+sleep 2 
+
+echo "${green}[!]Finished whois for found subdomains"
+
+sleep 3
+
+echo "${red}[!]Performing nslookup for found ips of subdomains and trying to reverse dns the ip addresses"
+sleep 1
+for ip in  $(cat subdomains_ip.txt);
+do
+
+    nslookup=$(nslookup "$ip")
+    echo "${green}[!]Results: "$nslookup"" >> "nslookup_ips.txt"
+    echo "${green}[!]Finished : "$ip""
+
+done
+
+sleep 2
+
+echo "${green}[!]Completed nslookups for found sudomain ip addresses"
+
+sleep 1
+
+echo "${red}[!]Performing whois for ips "
+
+sleep 2
+
+for ip in  $(cat subdomains_ip.txt);
+do
+
+    whois=$(whois "$ip")
+    echo "${green}[!]Results: "$whois"" >> "whois_ips.txt"
+    echo "${green}[!]Finished : "$ip""
+
+done
+
+sleep 2
+
+echo "${green}[!]Completed whois for found subdomain ip addresses"
+
+sleep 3
+
+echo "${red}[!]Trying reverse dns with dnsx and mapcidr"
+
+sleep 2
+
+cat subdomains_ip.txt | mapcidr -silent | dnsx -ptr -resp-only -o dnsx_results.txt
+
+sleep 2
+
+echo "${green}[!]Finished to reverse dns the found sundomains ip addresses"
