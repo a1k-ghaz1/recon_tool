@@ -18,7 +18,7 @@ A best automation Reconaissance tool for bug bounty by just entering your target
 <h4>3: SubDomainizer - <a href="https://github.com/nsonaniya2010/SubDomainizer">@nsonaniya2010</h4></a>
 <h4>4: Paramspider   - <a href="https://github.com/devanshbatham/ParamSpider">@devanshbatham</h4></a>
 <h4>5: Chaos | Subfinder | httpx - <a href="https://github.com/projectdiscovery">@projectdiscovery</a>
-<h4>5: Assetfinder | waybackurls | httprobe - <a href="https://github.com/tomnomnom">@projectdiscov</a> 
+<h4>5: Assetfinder | waybackurls | httprobe - <a href="https://github.com/tomnomnom">@Tomnomnoom</a> 
 <h4>6: Amass - <a href="https://github.com/owasp-amass/amass">@OWASP</a>
 
   <br>
