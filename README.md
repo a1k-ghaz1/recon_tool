@@ -27,9 +27,16 @@ A best automation Reconaissance tool for bug bounty by just entering your target
   
 <h2>Steps to Install the tool and How to use</h2>
   
-<h5>step:1 - Change your directory to home:  cd $HOME </h5>
-<h5>step:2 - Git clone the repository:  git clone https://github.com/sanjai-AK47/recon_tool.git </h5>
-<h5>step:3 - After cloning it Change the directory : cd ~/recon_tool </h5>
+<h5>step:1 - Change your directory to home:  
+  
+             cd $HOME 
+<h5>step:2 - Git clone the repository:  
+  
+             git clone https://github.com/sanjai-AK47/recon_tool.git
+<h5>step:3 - After cloning it Change the directory : 
+  
+   
+             cd ~/recon_tool 
 <h5>step:4 - After that follow the commands to run the shell script:
                                              
                chmod +x py_install.sh
